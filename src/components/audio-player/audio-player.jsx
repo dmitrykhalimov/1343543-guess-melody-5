@@ -27,8 +27,17 @@ export default class AudioPlayer extends PureComponent {
   componentWillUnmount() {
     const audio = this._audioRef.current;
     audio.oncanplaythrough = null;
-    audio.onplay = null;
     audio.onpause = null;
+  }
+
+  componentDidUpdate() {
+    const audio = this._audioRef.current;
+
+    if (this.props.isPlaying) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
   }
 
   render() {
@@ -51,16 +60,6 @@ export default class AudioPlayer extends PureComponent {
         </div>
       </Fragment>
     );
-  }
-
-  componentDidUpdate() {
-    const audio = this._audioRef.current;
-
-    if (this.props.isPlaying) {
-      audio.play();
-    } else {
-      audio.pause();
-    }
   }
 }
 
