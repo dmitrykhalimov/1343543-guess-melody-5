@@ -24,12 +24,15 @@ const store = createStore(
     )
 );
 
-store.dispatch(fetchQuestionList());
-store.dispatch(checkAuth());
-
-ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
-    document.querySelector(`#root`)
-);
+Promise.all([
+  store.dispatch(fetchQuestionList()),
+  store.dispatch(checkAuth()),
+])
+.then(() => {
+  ReactDOM.render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+      document.querySelector(`#root`)
+  );
+});
