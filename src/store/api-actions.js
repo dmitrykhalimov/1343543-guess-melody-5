@@ -1,13 +1,14 @@
-import {loadQuestions, requireAuthorization} from "./action";
+import {loadQuestions, requireAuthorization, redirectToRoute} from "./action";
 import {AuthorizationStatus} from "../const";
+import {AppRoute, APIRoute} from "../const";
 
 export const fetchQuestionList = () => (dispatch, _getState, api) => (
-  api.get(`/questions`)
+  api.get(APIRoute.QUESTIONS)
     .then(({data}) => dispatch(loadQuestions(data)))
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (
-  api.get(`/login`)
+  api.get(APIRoute.LOGIN)
     .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
     .catch((err) => {
       throw err;
@@ -15,6 +16,7 @@ export const checkAuth = () => (dispatch, _getState, api) => (
 );
 
 export const login = ({login: email, password}) => (dispatch, _getState, api) => (
-  api.post(`/login`, {email, password})
+  api.post(APIRoute.LOGIN, {email, password})
     .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
+    .then(() => dispatch(redirectToRoute(AppRoute.RESULT)))
 );
